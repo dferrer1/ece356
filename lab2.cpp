@@ -32,8 +32,7 @@ int main(int argc, char* argv[]){
 		hit_time = atoi(argv[4]);
 		miss_time = atoi(argv[5]);
 	} 
-		
-		
-    int total_num_index = num_blocks / block_size; // this should be the number of blocks in each set
+			
+    int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
 	cache.resize(blocks_per_index);
 }
