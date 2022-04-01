@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 	int associativity; //(only direct mapped is needed).
 	int hit_time; //(in cycles)
 	int miss_time;
-    int blocks_per_index;
+	int blocks_per_index;
 	
 		if (argc !=6){
 		cerr << "usage: a.out block_size num_blocks associativity hit_time miss_time"<< endl;
@@ -34,7 +34,8 @@ int main(int argc, char* argv[]){
 		hit_time = atoi(argv[4]);
 		miss_time = atoi(argv[5]);
 	} 
-    int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
+
+	int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
 	cache.resize(blocks_per_index);
 	string address;
 	int hits = 0, misses = 0;
