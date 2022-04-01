@@ -33,10 +33,10 @@ int main(int argc, char* argv[]){
 		hit_time = atoi(argv[4]);
 		miss_time = atoi(argv[5]);
 	} 
-		
-		
-    int total_num_index = num_blocks / block_size; // this should be the number of blocks in each set
+			
+    int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
 	cache.resize(blocks_per_index);
+<<<<<<< HEAD
 	string address;
 	int hits = 0, misses = 0;
 	while (cin >> address){
@@ -47,3 +47,6 @@ int main(int argc, char* argv[]){
 	}
 	}
 }
+=======
+}
+>>>>>>> 6962b5342fc4e1f767725ac2d13ed9d4ef112e5a
