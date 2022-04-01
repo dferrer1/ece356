@@ -3,6 +3,11 @@
 
 using namespace std;
 
+struct data{
+	int valid_bit;
+	int tag;	
+}
+
 int main(int argc, char* argv[]){
 	vector <vector>cache;
     vector <int>set;
@@ -14,7 +19,11 @@ int main(int argc, char* argv[]){
     int blocks_per_index;
 	
 	if (argc !=6){
-		fprintf(stderr,"usage: ./lab2 block_size num_blocks associativity(d or a) hit_time miss_time\n");
+		if (argc !=6){
+		cerr << "usage: a.out block_size num_blocks associativity hit_time miss_time"<< endl;
+		cerr << "usage: all arguments are integers"<< endl;
+		cerr << "usage: for associativity 1 for direct mapped "<< endl;
+		cerr << "usage: for associativity 0 for full associative mapped "<< endl;
 		return;
 	}else{
 		block_size = argv[1];
@@ -23,6 +32,8 @@ int main(int argc, char* argv[]){
 		hit_time = argv[4];
 		miss_time = argv[5];
 	} 
-	
+	vector <vector <data> > cache;
+		
+		
     blocks_per_index = num_blocks / block_size; // this should be the number of blocks in each set
 }
