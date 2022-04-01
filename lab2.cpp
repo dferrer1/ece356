@@ -11,14 +11,15 @@ int main(int argc, char* argv[]){
 	int hit_time; //(in cycles)
 	int miss_time;
 	
-	if (argc !=5){
-		
+	if (argc !=6){
+		fprintf(stderr,"usage: ./lab2 block_size num_blocks associativity(d or a) hit_time miss_time\n");
+		return;
 	}else{
-		Block_size = argv[0];
-		num_blocks = argv[1];
-		associativity = argv[2];
-		hit_time = argv[3];
-		miss_time = argv[4];
+		Block_size = argv[1];
+		num_blocks = argv[2];
+		associativity = argv[3];
+		hit_time = argv[4];
+		miss_time = argv[5];
 	} 
 	
 }
