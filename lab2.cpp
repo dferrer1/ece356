@@ -9,6 +9,7 @@ struct data{
 };
 
 int main(int argc, char* argv[]){
+	printf("Hello!\n");
 	vector <struct data> cache;
     vector <int>set;
 	int block_size;
@@ -24,7 +25,7 @@ int main(int argc, char* argv[]){
 		cerr << "usage: all arguments are integers"<< endl;
 		cerr << "usage: for associativity 1 for direct mapped "<< endl;
 		cerr << "usage: for associativity 0 for full associative mapped "<< endl;
-		return;
+		return 1;
 	}else{
 		block_size = atoi(argv[1]);
 		num_blocks = atoi(argv[2]);
@@ -36,4 +37,13 @@ int main(int argc, char* argv[]){
 		
     int total_num_index = num_blocks / block_size; // this should be the number of blocks in each set
 	cache.resize(blocks_per_index);
+	string address;
+	int hits = 0, misses = 0;
+	while (cin >> address){
+		//ignore the 0x
+		address.erase(0,2);
+		int fin_address = stoi(address);
+		printf("the int is %d\n", fin_address);
+	}
+	}
 }
