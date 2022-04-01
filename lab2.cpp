@@ -1,7 +1,9 @@
-#include<stdlib.h>
+#include<iostream>
 #include<vector>
 
 using namespace std;
+
+int find_block(int address);
 
 int main(int argc, char* argv[]){
 	
@@ -22,4 +24,8 @@ int main(int argc, char* argv[]){
 		miss_time = argv[5];
 	} 
 	
+}
+
+int find_block() {
+    return -1;
 }
