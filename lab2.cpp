@@ -6,10 +6,10 @@ using namespace std;
 struct data{
 	int valid_bit;
 	int tag;	
-}
+};
 
 int main(int argc, char* argv[]){
-	vector <vector>cache;
+	vector <struct data> cache;
     vector <int>set;
 	int block_size;
 	int num_blocks; //Number of blocks in the cache. 
@@ -26,14 +26,14 @@ int main(int argc, char* argv[]){
 		cerr << "usage: for associativity 0 for full associative mapped "<< endl;
 		return;
 	}else{
-		block_size = argv[1];
-		num_blocks = argv[2];
-		associativity = argv[3];
-		hit_time = argv[4];
-		miss_time = argv[5];
+		block_size = atoi(argv[1]);
+		num_blocks = atoi(argv[2]);
+		associativity = atoi(argv[3]);
+		hit_time = atoi(argv[4]);
+		miss_time = atoi(argv[5]);
 	} 
-	vector <vector <data> > cache;
 		
 		
-    blocks_per_index = num_blocks / block_size; // this should be the number of blocks in each set
+    int total_num_index = num_blocks / block_size; // this should be the number of blocks in each set
+	cache.resize(blocks_per_index);
 }
