@@ -61,8 +61,8 @@ int main(int argc, char* argv[]){
 	miss_rate = misses/(hits + misses);
 	AMAT = hit_time + (miss_rate * miss_time);
 	cout << "Hit Rate: " << hit_rate
-		<< "Miss rate: " << miss_rate
-		<< "Average Memory Access Time: " << AMAT << endl;
+		<< " Miss rate: " << miss_rate
+		<< " Average Memory Access Time: " << AMAT << endl;
 	
 	return 0;
 }
