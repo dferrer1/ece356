@@ -10,7 +10,7 @@ struct data{
 
 int main(int argc, char* argv[]){
 	vector <vector>cache;
-    vector <int>set;
+    vector <data>set;
 	int block_size;
 	int num_blocks; //Number of blocks in the cache. 
 	int associativity; //(only direct mapped is needed).
@@ -28,12 +28,13 @@ int main(int argc, char* argv[]){
 	}else{
 		block_size = argv[1];
 		num_blocks = argv[2];
-		associativity = argv[3];
+		associativity = argv[3]; // 0 - fully, 1 - direct, n - n-associative
 		hit_time = argv[4];
 		miss_time = argv[5];
 	} 
 	vector <vector <data> > cache;
 		
-		
-    blocks_per_index = num_blocks / block_size; // this should be the number of blocks in each set
+    if (associativity != 0) {
+        blocks_per_index = num_blocks / associativity; // this should be the number of blocks in each set
+    }
 }
