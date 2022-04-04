@@ -9,15 +9,24 @@ struct data{
 	int tag;	
 };
 
+// generate index mask
+int gen_index_mask(int index_size, int offset_size = 0);
+
 int main(int argc, char* argv[]){
 	vector <struct data> cache;
-    vector <int> associative_maps;
-	int block_size;
+    vector <int> associative_maps;	// what will this be used for 
+	
+	int block_size;	//number of words in a block
 	int num_blocks; //Number of blocks in the cache. 
 	int associativity; //(only direct mapped is needed).
 	int hit_time; //(in cycles)
 	int miss_time;
 	int blocks_per_index;
+	int hits = 0;
+	int misses = 0;
+	float hit_rate;
+	float miss_rate;
+	float AMAT;
 	
 		if (argc !=6){
 		cerr << "usage: a.out block_size num_blocks associativity hit_time miss_time"<< endl;
@@ -33,11 +42,10 @@ int main(int argc, char* argv[]){
 		hit_time = atoi(argv[4]);
 		miss_time = atoi(argv[5]);
 	} 
-
+	
 	int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
 	cache.resize(blocks_per_index);
 	string address;
-	int hits = 0, misses = 0;
 	stringstream ss;
 	int fin_address;
 	//try to generate the bitmasks
@@ -61,5 +69,38 @@ int main(int argc, char* argv[]){
 		ss.clear();
 		//extract the offset
 	}
+	
+	hit_rate = hits/(hits + misses);
+	miss_rate = misses/(hits + misses);
+	AMAT = hit_time + (miss_rate * miss_time);
+	cout << "Hit Rate: " << hit_rate
+		<< " Miss rate: " << miss_rate
+		<< " Average Memory Access Time: " << AMAT << endl;
+	
+	gen_index_mask(5);
+	gen_index_mask(5, 2);
+
 	return 0;
 }
+
+
+// generate index mask: this function should generate a decimal value that can be used as a mask for finding the value of the index
+int gen_index_mask(int index_size, int offset_size) {
+	int mask = 0;
+
+	// 
+	for (int i = 0; i < (index_size+offset_size); i++) {
+		// ignore offset bits
+		if (i >= offset_size && i > 1) {
+			mask += (1<<i);
+		} else if (i >= offset_size && i == 0) {
+			mask += 1;
+		} else if (i >= offset_size && i == 1) {
+			mask += 2;
+		}
+	}
+	printf("Returned mask: 0x%x\n", mask);
+	
+	return mask;
+}
+
