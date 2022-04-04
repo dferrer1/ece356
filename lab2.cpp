@@ -9,6 +9,9 @@ struct data{
 	int tag;	
 };
 
+// generate index mask
+int gen_index_mask(int index_size, int offset_size = 0);
+
 int main(int argc, char* argv[]){
 	printf("Hello! how are you doing?\n");  //i am fine how are you
 	
@@ -64,5 +67,30 @@ int main(int argc, char* argv[]){
 		<< " Miss rate: " << miss_rate
 		<< " Average Memory Access Time: " << AMAT << endl;
 	
+	gen_index_mask(5);
+	gen_index_mask(5, 2);
+
 	return 0;
 }
+
+
+// generate index mask: this function should generate a decimal value that can be used as a mask for finding the value of the index
+int gen_index_mask(int index_size, int offset_size) {
+	int mask = 0;
+
+	// 
+	for (int i = 0; i < (index_size+offset_size); i++) {
+		// ignore offset bits
+		if (i >= offset_size && i > 1) {
+			mask += (1<<i);
+		} else if (i >= offset_size && i == 0) {
+			mask += 1;
+		} else if (i >= offset_size && i == 1) {
+			mask += 2;
+		}
+	}
+	printf("Returned mask: 0x%x\n", mask);
+	
+	return mask;
+}
+
