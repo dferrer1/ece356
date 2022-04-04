@@ -1,7 +1,7 @@
 #include<iostream>
 #include<vector>
 #include <sstream>
-
+#include <math.h>
 using namespace std;
 
 struct data{
@@ -10,7 +10,6 @@ struct data{
 };
 
 int main(int argc, char* argv[]){
-	printf("Hello! how are you doing?\n");
 	vector <struct data> cache;
     vector <int> associative_maps;
 	int block_size;
@@ -41,14 +40,26 @@ int main(int argc, char* argv[]){
 	int hits = 0, misses = 0;
 	stringstream ss;
 	int fin_address;
+	//try to generate the bitmasks
+	int total_address_mask = 0;
+	int block_offset_upperbound = 0;
+	int index_offset_upperbound = 0;
+	for (int i = 0; i < 20; i++){
+		total_address_mask |= (1 << i);
+	}
+	//calculate the block offset and mark the upperbound
+	printf("calculating the log base 2 of %d\n",block_size);
+	block_offset_upperbound = log2(block_size)/log2(2);
+	index_offset_upperbound = (log2(num_blocks)/log2(2)) + block_offset_upperbound;
+	printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
 	while (cin >> address){
 		//ignore the 0x
 		address.erase(0,2);
-		cout << "the string is " << address << "\n";
+		//cout << "the string is " << address << "\n";
 		ss << std::hex << address;
 		ss >> fin_address;
 		ss.clear();
-		printf("Address is %d\n", fin_address);
+		//extract the offset
 	}
 	return 0;
 }
