@@ -44,7 +44,12 @@ int main(int argc, char* argv[]){
 	} 
 	
 	int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
-	cache.resize(blocks_per_index);
+	cache.resize(total_num_index);
+	//initialize the cache
+	for (int i = 0; i < total_num_index;i++){
+		cache.at(i).tag = 0;
+		cache.at(i).valid_bit = 0;
+	}
 	string address;
 	stringstream ss;
 	int fin_address;
@@ -60,15 +65,24 @@ int main(int argc, char* argv[]){
 	block_offset_upperbound = log2(block_size)/log2(2);
 	index_offset_upperbound = (log2(num_blocks)/log2(2)) + block_offset_upperbound;
 	printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
-	while (cin >> address){
+	//while (cin >> address){
+		cin >> address;
 		//ignore the 0x
 		address.erase(0,2);
-		//cout << "the string is " << address << "\n";
+		cout << "the string is " << address << "\n";
 		ss << std::hex << address;
 		ss >> fin_address;
 		ss.clear();
 		//extract the offset
-	}
+		printf("calling with params %d and %d\n",block_offset_upperbound,index_offset_upperbound-block_offset_upperbound);
+		int index_extraction = gen_index_mask(index_offset_upperbound-block_offset_upperbound,block_offset_upperbound);
+		int tag_extraction = gen_index_mask(20-index_offset_upperbound,index_offset_upperbound);
+		printf("The index bitmask is %d and the tag bitmask is %d\n",index_extraction,tag_extraction);
+		int index = fin_address & index_extraction;
+		index = index >> block_offset_upperbound;
+		int tag = fin_address & tag_extraction;
+		printf("the index is %d and the tag is %d\n", index, tag);
+	//}
 	
 	hit_rate = hits/(hits + misses);
 	miss_rate = misses/(hits + misses);
