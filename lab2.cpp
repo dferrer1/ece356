@@ -11,6 +11,7 @@ struct data{
 
 // generate index mask
 int gen_index_mask(int index_size, int offset_size = 0);
+int gen_tag_mask(int tag_size, int index_size, int offset_size = 0);
 
 int main(int argc, char* argv[]){
 	vector <struct data> cache;
@@ -28,7 +29,7 @@ int main(int argc, char* argv[]){
 	float miss_rate;
 	float AMAT;
 	
-		if (argc !=6){
+	if (argc !=6){
 		cerr << "usage: a.out block_size num_blocks associativity hit_time miss_time"<< endl;
 		cerr << "usage: all arguments are integers"<< endl;
 		cerr << "usage: for associativity 1 for direct mapped "<< endl;
@@ -80,6 +81,9 @@ int main(int argc, char* argv[]){
 	gen_index_mask(5);
 	gen_index_mask(5, 2);
 
+	gen_tag_mask(4, 4);
+	gen_tag_mask(4, 4, 4);
+
 	return 0;
 }
 
@@ -104,3 +108,23 @@ int gen_index_mask(int index_size, int offset_size) {
 	return mask;
 }
 
+
+int gen_tag_mask(int tag_size, int index_size, int offset_size) {
+	int mask = 0;
+
+    //
+    for (int i = 0; i < (tag_size+index_size+offset_size); i++) {
+        // ignore offset bits
+        if (i >= index_size+offset_size && i > 1) {
+            mask += (1<<i);
+        } else if (i >= index_size+offset_size && i == 0) {
+            mask += 1;
+        } else if (i >= index_size+offset_size && i == 1) {
+            mask += 2;
+        }
+    }
+    printf("Returned mask: 0x%x\n", mask);
+
+
+	return mask;
+}
