@@ -66,6 +66,7 @@ int main(int argc, char* argv[]){
 	block_offset_upperbound = log2(block_size)/log2(2);
 	index_offset_upperbound = (log2(num_blocks)/log2(2)) + block_offset_upperbound;
 	printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
+	//for now, read in one address and process it
 	//while (cin >> address){
 		cin >> address;
 		//ignore the 0x
@@ -74,10 +75,11 @@ int main(int argc, char* argv[]){
 		ss << std::hex << address;
 		ss >> fin_address;
 		ss.clear();
-		//extract the offset
+		//extract the mask
 		printf("calling with params %d and %d\n",block_offset_upperbound,index_offset_upperbound-block_offset_upperbound);
 		int index_extraction = gen_index_mask(index_offset_upperbound-block_offset_upperbound,block_offset_upperbound);
 		int tag_extraction = gen_index_mask(20-index_offset_upperbound,index_offset_upperbound);
+		//pull out the index and tag and shift the index right so that the lowest bit is 2^0, not whatever it was
 		printf("The index bitmask is %d and the tag bitmask is %d\n",index_extraction,tag_extraction);
 		int index = fin_address & index_extraction;
 		index = index >> block_offset_upperbound;
