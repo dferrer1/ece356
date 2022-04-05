@@ -45,9 +45,9 @@ int main(int argc, char* argv[]){
 	} 
 	
 	int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
-	cache.resize(total_num_index);
+	cache.resize(num_blocks);
 	//initialize the cache
-	for (int i = 0; i < total_num_index;i++){
+	for (int i = 0; i < num_blocks;i++){
 		cache.at(i).tag = 0;
 		cache.at(i).valid_bit = 0;
 	}
@@ -67,33 +67,48 @@ int main(int argc, char* argv[]){
 	index_offset_upperbound = (log2(num_blocks)/log2(2)) + block_offset_upperbound;
 	printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
 	//for now, read in one address and process it
-	//while (cin >> address){
-		cin >> address;
+	while (cin >> address){
 		//ignore the 0x
 		address.erase(0,2);
-		cout << "the string is " << address << "\n";
+		//cout << "the string is " << address << "\n";
 		ss << std::hex << address;
 		ss >> fin_address;
 		ss.clear();
 		//extract the mask
-		printf("calling with params %d and %d\n",block_offset_upperbound,index_offset_upperbound-block_offset_upperbound);
+		//printf("calling with params %d and %d\n",block_offset_upperbound,index_offset_upperbound-block_offset_upperbound);
 		int index_extraction = gen_index_mask(index_offset_upperbound-block_offset_upperbound,block_offset_upperbound);
 		int tag_extraction = gen_index_mask(20-index_offset_upperbound,index_offset_upperbound);
 		//pull out the index and tag and shift the index right so that the lowest bit is 2^0, not whatever it was
-		printf("The index bitmask is %d and the tag bitmask is %d\n",index_extraction,tag_extraction);
+		//printf("The index bitmask is %d and the tag bitmask is %d\n",index_extraction,tag_extraction);
 		int index = fin_address & index_extraction;
 		index = index >> block_offset_upperbound;
 		int tag = fin_address & tag_extraction;
 		printf("the index is %d and the tag is %d\n", index, tag);
-	//}
-	
-	hit_rate = hits/(hits + misses);
-	miss_rate = misses/(hits + misses);
+		if (cache.at(index).valid_bit == 1){
+			if(cache.at(index).tag == tag){
+				printf("hit\n");
+				hits++;
+			}
+			else{
+				cache.at(index).tag = tag;
+				printf("miss\n");
+				misses++;
+			}
+		}
+		else{
+			cache.at(index).valid_bit = 1;
+			cache.at(index).tag = tag;
+			misses++;
+			printf("miss\n");
+		}
+	}
+	printf("%d hits, %d misses\n",hits,misses);
+	hit_rate = (float) hits/(hits + misses);
+	miss_rate = (float) misses/(hits + misses);
 	AMAT = hit_time + (miss_rate * miss_time);
 	cout << "Hit Rate: " << hit_rate
 		<< " Miss rate: " << miss_rate
 		<< " Average Memory Access Time: " << AMAT << endl;
-	
 	gen_index_mask(5);
 	gen_index_mask(5, 2);
 
@@ -119,7 +134,7 @@ int gen_index_mask(int index_size, int offset_size) {
 			mask += 2;
 		}
 	}
-	printf("Returned mask: 0x%x\n", mask);
+	//printf("Returned mask: 0x%x\n", mask);
 	
 	return mask;
 }
@@ -139,7 +154,7 @@ int gen_tag_mask(int tag_size, int index_size, int offset_size) {
             mask += 2;
         }
     }
-    printf("Returned mask: 0x%x\n", mask);
+    //printf("Returned mask: 0x%x\n", mask);
 
 
 	return mask;
