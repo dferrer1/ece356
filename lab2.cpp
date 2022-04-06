@@ -14,9 +14,7 @@ int gen_index_mask(int index_size, int offset_size = 0);
 int gen_tag_mask(int tag_size, int index_size, int offset_size = 0);
 
 int main(int argc, char* argv[]){
-	vector <struct data> cache;
-    vector <int> associative_maps;	// what will this be used for 
-	
+	vector <vector<struct data>> cache;	
 	int block_size;	//number of words in a block
 	int num_blocks; //Number of blocks in the cache. 
 	int associativity; //(only direct mapped is needed).
@@ -45,11 +43,14 @@ int main(int argc, char* argv[]){
 	} 
 	
 	int total_num_index = num_blocks / block_size; // this should be the number of sets in the cache
-	cache.resize(num_blocks);
+	cache.resize(num_blocks/associativity);
 	//initialize the cache
-	for (int i = 0; i < num_blocks;i++){
-		cache.at(i).tag = 0;
-		cache.at(i).valid_bit = 0;
+	for (int i = 0; i < num_blocks/associativity;i++){
+		cache.at(i).resize(associativity);
+		for (int j = 0; j < associativity; j++){
+			cache[i][j].tag = 0;
+			cache[i][j].valid_bit = 0;
+		}
 	}
 	string address;
 	stringstream ss;
@@ -83,23 +84,23 @@ int main(int argc, char* argv[]){
 		int index = fin_address & index_extraction;
 		index = index >> block_offset_upperbound;
 		int tag = fin_address & tag_extraction;
-		printf("the index is %d and the tag is %d\n", index, tag);
-		if (cache.at(index).valid_bit == 1){
-			if(cache.at(index).tag == tag){
-				printf("hit\n");
-				hits++;
-			}
-			else{
-				cache.at(index).tag = tag;
-				printf("miss\n");
-				misses++;
+		//printf("the index is %d and the tag is %d\n", index, tag);
+		//the index needs to be divided by the associativity
+		index = index / associativity;
+		int cur_miss = 1;
+		for (int i = 0; i < associativity; i++){
+			if (cache[index][i].valid_bit == 1){
+				if(cache[index][i].tag == tag){
+		//			printf("hit\n");
+					hits++;
+					cur_miss = 0;
+				}
 			}
 		}
-		else{
-			cache.at(index).valid_bit = 1;
-			cache.at(index).tag = tag;
+		//if there was a miss, find a spot to insert
+		if(cur_miss == 1){
 			misses++;
-			printf("miss\n");
+			//Need to find some way to insert
 		}
 	}
 	printf("%d hits, %d misses\n",hits,misses);
