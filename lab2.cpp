@@ -88,9 +88,10 @@ int main(int argc, char* argv[]){
 		int index = fin_address & index_extraction;
 		index = index >> block_offset_upperbound;
 		int tag = fin_address & tag_extraction;
-		printf("the index is %d and the tag is %d\n", index, tag);
 		//the index needs to be divided by the associativity
 		index = index / associativity;
+		printf("the index is %d and the tag is %d\n", index, tag);
+
 		int cur_miss = 1;
 		for (int i = 0; i < associativity; i++){
 			if (cache[index][i].valid_bit == 1){
@@ -117,6 +118,7 @@ int main(int argc, char* argv[]){
 			}
 			if (rand_flag){
 				int insertion_index = rand() % associativity;
+				printf("inserting randomly; index %d of set %d\n",index,insertion_index);
 				cache[index][insertion_index].valid_bit = 1;
 				cache[index][insertion_index].tag = tag;
 			}
