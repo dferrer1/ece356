@@ -2,6 +2,8 @@
 #include<vector>
 #include <sstream>
 #include <math.h>
+#include <time.h>
+#include <stdlib.h>
 using namespace std;
 
 struct data{
@@ -26,12 +28,14 @@ int main(int argc, char* argv[]){
 	float hit_rate;
 	float miss_rate;
 	float AMAT;
-	
+	//seed the random generator
+	srand(time(NULL));
+
 	if (argc !=6){
 		cerr << "usage: a.out block_size num_blocks associativity hit_time miss_time"<< endl;
 		cerr << "usage: all arguments are integers"<< endl;
 		cerr << "usage: for associativity 1 for direct mapped "<< endl;
-		cerr << "usage: for associativity 0 for full associative mapped "<< endl;
+		cerr << "usage: for associativity n for n way associativity "<< endl;
 		printf("about to exit in disgrace\n");
 		return 1;
 	}else{
@@ -84,7 +88,7 @@ int main(int argc, char* argv[]){
 		int index = fin_address & index_extraction;
 		index = index >> block_offset_upperbound;
 		int tag = fin_address & tag_extraction;
-		//printf("the index is %d and the tag is %d\n", index, tag);
+		printf("the index is %d and the tag is %d\n", index, tag);
 		//the index needs to be divided by the associativity
 		index = index / associativity;
 		int cur_miss = 1;
@@ -100,7 +104,22 @@ int main(int argc, char* argv[]){
 		//if there was a miss, find a spot to insert
 		if(cur_miss == 1){
 			misses++;
-			//Need to find some way to insert
+			//flag to check if a random insertion is needed
+			int rand_flag = 1;
+			//check to see if any of them are empty
+			for (int i = 0; i < associativity; i++){
+				if(cache[index][i].valid_bit == 0){
+					cache[index][i].valid_bit = 1;
+					cache[index][i].tag = tag;
+					rand_flag = 0;
+					break;
+				}
+			}
+			if (rand_flag){
+				int insertion_index = rand() % associativity;
+				cache[index][insertion_index].valid_bit = 1;
+				cache[index][insertion_index].tag = tag;
+			}
 		}
 	}
 	printf("%d hits, %d misses\n",hits,misses);
