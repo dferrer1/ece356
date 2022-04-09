@@ -71,6 +71,7 @@ int main(int argc, char* argv[]){
 	block_offset_upperbound = log2(block_size)/log2(2);
 	index_offset_upperbound = (log2(num_blocks)/log2(2)) + block_offset_upperbound;
 	printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
+
 	//for now, read in one address and process it
 	while (cin >> address){
 		//ignore the 0x
@@ -88,6 +89,7 @@ int main(int argc, char* argv[]){
 		int index = fin_address & index_extraction;
 		index = index >> block_offset_upperbound;
 		int tag = fin_address & tag_extraction;
+		tag = tag >> index_offset_upperbound;
 		//the index needs to be divided by the associativity
 		index = index / associativity;
 		printf("the index is %d and the tag is %d\n", index, tag);
