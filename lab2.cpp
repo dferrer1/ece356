@@ -156,24 +156,3 @@ int gen_index_mask(int index_size, int offset_size) {
 	
 	return mask;
 }
-
-
-int gen_tag_mask(int tag_size, int index_size, int offset_size) {
-	int mask = 0;
-
-    //
-    for (int i = 0; i < (tag_size+index_size+offset_size); i++) {
-        // ignore offset bits
-        if (i >= index_size+offset_size && i > 1) {
-            mask += (1<<i);
-        } else if (i >= index_size+offset_size && i == 0) {
-            mask += 1;
-        } else if (i >= index_size+offset_size && i == 1) {
-            mask += 2;
-        }
-    }
-    //printf("Returned mask: 0x%x\n", mask);
-
-
-	return mask;
-}
