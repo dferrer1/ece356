@@ -133,12 +133,6 @@ int main(int argc, char* argv[]){
 	cout << "Hit Rate: " << hit_rate
 		<< " Miss rate: " << miss_rate
 		<< " Average Memory Access Time: " << AMAT << endl;
-	gen_index_mask(5);
-	gen_index_mask(5, 2);
-
-	gen_tag_mask(4, 4);
-	gen_tag_mask(4, 4, 4);
-
 	return 0;
 }
 
