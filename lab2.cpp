@@ -1,9 +1,9 @@
 #include<iostream>
 #include<vector>
-#include <sstream>
-#include <math.h>
-#include <time.h>
-#include <stdlib.h>
+#include<sstream>
+#include<math.h>
+#include<time.h>
+#include<stdlib.h>
 using namespace std;
 
 struct data{
@@ -13,7 +13,6 @@ struct data{
 
 // generate index mask
 int gen_index_mask(int index_size, int offset_size = 0);
-int gen_tag_mask(int tag_size, int index_size, int offset_size = 0);
 
 int main(int argc, char* argv[]){
 	vector <vector<struct data>> cache;	
@@ -66,6 +65,7 @@ int main(int argc, char* argv[]){
 	for (int i = 0; i < 20; i++){
 		total_address_mask |= (1 << i);
 	}
+	
 	//calculate the block offset and mark the upperbound
 	printf("calculating the log base 2 of %d\n",block_size);
 	block_offset_upperbound = log2(block_size)/log2(2);
@@ -98,7 +98,6 @@ int main(int argc, char* argv[]){
 		for (int i = 0; i < associativity; i++){
 			if (cache[index][i].valid_bit == 1){
 				if(cache[index][i].tag == tag){
-		//			printf("hit\n");
 					hits++;
 					cur_miss = 0;
 				}
@@ -126,6 +125,7 @@ int main(int argc, char* argv[]){
 			}
 		}
 	}
+	
 	printf("%d hits, %d misses\n",hits,misses);
 	hit_rate = (float) hits/(hits + misses);
 	miss_rate = (float) misses/(hits + misses);
@@ -136,11 +136,9 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-
 // generate index mask: this function should generate a decimal value that can be used as a mask for finding the value of the index
 int gen_index_mask(int index_size, int offset_size) {
 	int mask = 0;
-
 	// 
 	for (int i = 0; i < (index_size+offset_size); i++) {
 		// ignore offset bits
@@ -152,7 +150,5 @@ int gen_index_mask(int index_size, int offset_size) {
 			mask += 2;
 		}
 	}
-	//printf("Returned mask: 0x%x\n", mask);
-	
 	return mask;
 }
