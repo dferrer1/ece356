@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
 	int num_blocks; //Number of blocks in the cache. 
 	int associativity; //(only direct mapped is needed).
 	int hit_time; //(in cycles)
-	int miss_time;
+	int miss_time; //(in cycles)
 	int blocks_per_index;
 	int hits = 0;
 	int misses = 0;
@@ -29,7 +29,8 @@ int main(int argc, char* argv[]){
 	float AMAT;
 	//seed the random generator
 	srand(time(NULL));
-
+	
+	//error check command line arguments or read in if correct
 	if (argc !=6){
 		cerr << "usage: a.out block_size num_blocks associativity hit_time miss_time"<< endl;
 		cerr << "usage: all arguments are integers"<< endl;
@@ -67,10 +68,11 @@ int main(int argc, char* argv[]){
 	}
 	
 	//calculate the block offset and mark the upperbound
-	printf("calculating the log base 2 of %d\n",block_size);
-	block_offset_upperbound = log2(block_size)/log2(2);
-	index_offset_upperbound = (log2(num_blocks)/log2(2)) + block_offset_upperbound;
-	printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
+	//calculate the index offset and mark the upperbound
+	//printf("calculating the log base 2 of %d\n",block_size);
+	block_offset_upperbound = log2(block_size);
+	index_offset_upperbound = log2(num_blocks) + block_offset_upperbound;
+	//printf("the block upperbound is %d, the index upperbound is %d\n", block_offset_upperbound, index_offset_upperbound);
 
 	//for now, read in one address and process it
 	while (cin >> address){
@@ -94,6 +96,9 @@ int main(int argc, char* argv[]){
 		index = index / associativity;
 		printf("the index is %d and the tag is %d\n", index, tag);
 
+		//assume the cache is a miss
+		//check for a hit
+		//if hit update flag, increment hits
 		int cur_miss = 1;
 		for (int i = 0; i < associativity; i++){
 			if (cache[index][i].valid_bit == 1){
@@ -117,6 +122,7 @@ int main(int argc, char* argv[]){
 					break;
 				}
 			}
+			//if full replace
 			if (rand_flag){
 				int insertion_index = rand() % associativity;
 				printf("inserting randomly; index %d of set %d\n",index,insertion_index);
@@ -125,7 +131,8 @@ int main(int argc, char* argv[]){
 			}
 		}
 	}
-	
+	//calculate hitrate, and miss rate
+	//printing hits,misses,hit rate,miss rate,& AMAT
 	printf("%d hits, %d misses\n",hits,misses);
 	hit_rate = (float) hits/(hits + misses);
 	miss_rate = (float) misses/(hits + misses);
@@ -136,7 +143,7 @@ int main(int argc, char* argv[]){
 	return 0;
 }
 
-// generate index mask: this function should generate a decimal value that can be used as a mask for finding the value of the index
+// generate index mask: this function should generate a integer value that can be used as a mask for finding the value of the index
 int gen_index_mask(int index_size, int offset_size) {
 	int mask = 0;
 	// 
